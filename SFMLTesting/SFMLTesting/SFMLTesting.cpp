@@ -4,6 +4,7 @@
 #include "stdafx.h"
 #include <SFML/Graphics.hpp>
 
+sf::CircleShape MovingAround(sf::CircleShape shape);
 
 int main()
 {
@@ -50,6 +51,24 @@ sf::CircleShape MovingAround (sf::CircleShape shape)
 	{
 	
 		shape.move(1, 0);
+	
+	}
+	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left)) 
+	{
+	
+		shape.move(-1, 0);
+	
+	}
+	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up)) 
+	{
+	
+		shape.move(0, -1);
+	
+	}
+	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down)) 
+	{
+	
+		shape.move(0, 1);
 	
 	}
 
