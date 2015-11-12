@@ -5,10 +5,10 @@
 #include <SFML/Graphics.hpp>
 
 sf::CircleShape MovingAround(sf::CircleShape shape);
-sf::CircleShape DrawLocation(sf::CircleShape shape, float windowX, float windowY);
+sf::CircleShape DecidePosition(sf::CircleShape shape, float windowX, float windowY, float radius);
 
-float shapeX;
-float shapeY;
+float drawShapeX;
+float drawShapeY;
 
 int main()
 {
@@ -18,19 +18,13 @@ int main()
 	float windowX = 800;
 	float windowY = 600;
 
-	unsigned int windowXInt = windowX;
-	unsigned int windowYInt = windowY;
-
 	sf::CircleShape circle(radius);
 
 	circle.setFillColor(sf::Color(255, 255, 255, 255));
-	circle.setOutlineThickness(10);
-	circle.setOutlineColor(sf::Color(255, 0, 0));
 
 	// create the window
-	sf::RenderWindow window(sf::VideoMode(windowXInt, windowYInt), "My window");
+	sf::RenderWindow window(sf::VideoMode(windowX, windowY), "My window");
 
-	// run the program as long as the window is open
 	while (window.isOpen())
 	{
 		// check all the window's events that were triggered since the last iteration of the loop
@@ -44,6 +38,7 @@ int main()
 
 		//call functions
 		circle = MovingAround(circle);
+		circle = DecidePosition(circle, windowX, windowY, radius);
 
 		// clear the window with black color
 		window.clear(sf::Color::Black);
@@ -59,35 +54,76 @@ int main()
 }
 
 
+sf::CircleShape DecidePosition(sf::CircleShape shape, float windowX, float windowY, float radius) 
+{
+
+	//declare variables
+	sf::Vector2f position = shape.getPosition();
+	float shapeX = position.x;
+	float shapeY = position.y;
+	float diameter = radius * 2;
+
+	if (shapeX > windowX - diameter)
+	{
+	
+		shape.setPosition(windowX - diameter, shapeY);
+	
+	}
+	else if (shapeX < 0) 
+	{
+	
+		shape.setPosition(0, shapeY);
+	
+	}
+	
+	if (shapeY > windowY - diameter) 
+	{
+	
+		shape.setPosition(shapeX, windowY - diameter);
+	
+	}
+	else if (shapeY < 0) 
+	{
+	
+		shape.setPosition(shapeX, 0);
+	
+	}
+
+	return shape;
+	
+}
+
 sf::CircleShape MovingAround (sf::CircleShape shape) 
 {
+
+	float speed = 0.5;
 
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right)) 
 	{
 	
 		//shapeX += 1;
-		shape.move(1, 0);
+		shape.move(speed, 0);
 
 	}
 	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left)) 
 	{
 	
 		//shapeX -= 1;
-		shape.move(-1, 0);
+		shape.move(-speed, 0);
 	
 	}
 	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up)) 
 	{
 
 		//shapeY -= 1;
-		shape.move(0, -1);
+		shape.move(0, -speed);
 	
 	}
 	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down)) 
 	{
 	
 		//shapeY += 1;
-		shape.move(0, 1);
+		shape.move(0, speed);
 	
 	}
 
