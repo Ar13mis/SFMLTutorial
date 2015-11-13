@@ -3,16 +3,22 @@
 
 #include "stdafx.h"
 #include <SFML/Graphics.hpp>
+#include <cstdlib>
+#include <ctime>
 
 //define classes
-sf::RectangleShape MovingAround(sf::RectangleShape shape, sf::RectangleShape square);
+sf::RectangleShape MovingAround(sf::RectangleShape shape);
 sf::RectangleShape DecidePosition(sf::RectangleShape shape, float windowX, float windowY, float characterX);
-sf::RectangleShape RectanglePosition(sf::RectangleShape shape);
+sf::RectangleShape RectanglePosition(sf::RectangleShape shape, float windowX, float windowY);
 bool Collision(sf::RectangleShape object1, sf::RectangleShape object2);
+int RandomNumber(int myMod);
 
 //main function
 int main()
 {
+
+	//seed the random number generator
+	srand(time(NULL));
 
 	//Declare variables
 	bool close = false;
@@ -22,22 +28,33 @@ int main()
 	float characterY = characterX;
 
 	sf::RectangleShape character(sf::Vector2f(characterX, characterY));
-	character.setFillColor(sf::Color(255, 0, 0, 255));
+	character.setFillColor(sf::Color(0, 0, 255, 255));
 
 	//enemy properties
 	float rectX = 20;
 	float rectY = rectX;
 
-	sf::RectangleShape square(sf::Vector2f(rectX, rectY));	
+	sf::RectangleShape square1(sf::Vector2f(rectX, rectY));
+	sf::RectangleShape square2(sf::Vector2f(rectX, rectY));
+	sf::RectangleShape square3(sf::Vector2f(rectX, rectY));
+
+	square1.setFillColor(sf::Color(255, 0, 0, 255));
+	square2.setFillColor(sf::Color(255, 0, 0, 255));
+	square3.setFillColor(sf::Color(255, 0, 0, 255));
+
 
 	//window properties
 	float windowX = 800;
 	float windowY = 600;
 
 
-
 	// create the window
 	sf::RenderWindow window(sf::VideoMode(windowX, windowY), "My window");
+
+	//decide the random positions of the enemies
+	square1 = RectanglePosition(square1, windowX, windowY);
+	square2 = RectanglePosition(square2, windowX, windowY);
+	square3 = RectanglePosition(square3, windowX, windowY);
 
 	///GAME LOOP
 	while (window.isOpen())
@@ -53,14 +70,23 @@ int main()
 
 		//call functions
 		//character functions
-		character = MovingAround(character, square);
+		character = MovingAround(character);
 		character = DecidePosition(character, windowX, windowY, characterX);
 
-		//enemy functions
-		square = RectanglePosition(square);
-
 		//test for collision
-		close = Collision(character, square);
+		close = Collision(character, square1);
+		if (close == false) 
+		{
+		
+			close = Collision(character, square2);
+
+			if (close == false) 
+			{
+			
+				close = Collision(character, square3);
+			
+			}
+		}
 
 		//close if collision
 		if (close == true) 
@@ -74,7 +100,9 @@ int main()
 		window.clear(sf::Color::Black);
 
 		//drawing
-		window.draw(square);
+		window.draw(square1);
+		window.draw(square2);
+		window.draw(square3);
 		window.draw(character);
 
 		//end the frame
@@ -126,7 +154,7 @@ sf::RectangleShape DecidePosition(sf::RectangleShape shape, float windowX, float
 }
 
 //Move the character around the screen
-sf::RectangleShape MovingAround (sf::RectangleShape shape, sf::RectangleShape square) 
+sf::RectangleShape MovingAround (sf::RectangleShape shape) 
 {
 
 	//declare variables
@@ -166,10 +194,13 @@ sf::RectangleShape MovingAround (sf::RectangleShape shape, sf::RectangleShape sq
 }
 
 //draw the enemies
-sf::RectangleShape RectanglePosition(sf::RectangleShape shape) 
+sf::RectangleShape RectanglePosition(sf::RectangleShape shape, float windowX, float windowY) 
 {
 
-	shape.setPosition(200, 100);
+	int myX = RandomNumber(windowX);
+	int myY = RandomNumber(windowY);
+
+	shape.setPosition(myX, myY);
 
 	return shape;
 
@@ -193,4 +224,18 @@ bool Collision(sf::RectangleShape object1, sf::RectangleShape object2)
 		return false;
 
 	}
+}
+
+//Generate a random number
+int RandomNumber(int myMod)
+{
+
+		//declare a random number variable
+		int randomNumber;
+
+		//get the random number
+		randomNumber = rand() % myMod + 1;
+
+		return randomNumber;
+
 }
