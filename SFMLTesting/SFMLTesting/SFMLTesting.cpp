@@ -3,57 +3,66 @@
 
 #include "stdafx.h"
 #include <SFML/Graphics.hpp>
-#include <iostream>
 
+//define classes
 sf::RectangleShape MovingAround(sf::RectangleShape shape, sf::RectangleShape square);
 sf::RectangleShape DecidePosition(sf::RectangleShape shape, float windowX, float windowY, float characterX);
 sf::RectangleShape RectanglePosition(sf::RectangleShape shape);
 bool Collision(sf::RectangleShape object1, sf::RectangleShape object2);
 
-float drawShapeX;
-float drawShapeY;
-
+//main function
 int main()
 {
 
+	//Declare variables
 	bool close = false;
 
+	//Character properties
 	float characterX = 40;
 	float characterY = characterX;
 
+	sf::RectangleShape character(sf::Vector2f(characterX, characterY));
+	character.setFillColor(sf::Color(255, 0, 0, 255));
+
+	//enemy properties
 	float rectX = 20;
 	float rectY = rectX;
 
+	sf::RectangleShape square(sf::Vector2f(rectX, rectY));	
+
+	//window properties
 	float windowX = 800;
 	float windowY = 600;
 
-	sf::RectangleShape character(sf::Vector2f(characterX, characterY));
-	sf::RectangleShape square(sf::Vector2f(rectX, rectY));
 
-	character.setFillColor(sf::Color(255, 0, 0, 255));
 
 	// create the window
 	sf::RenderWindow window(sf::VideoMode(windowX, windowY), "My window");
 
+	///GAME LOOP
 	while (window.isOpen())
 	{
-		// check all the window's events that were triggered since the last iteration of the loop
+		// check all window events
 		sf::Event event;
 		while (window.pollEvent(event))
 		{
-			// "close requested" event: we close the window
+			// "close requested" event
 			if (event.type == sf::Event::Closed)
 				window.close();
 		}
 
 		//call functions
+		//character functions
 		character = MovingAround(character, square);
 		character = DecidePosition(character, windowX, windowY, characterX);
 
+		//enemy functions
 		square = RectanglePosition(square);
 
+		//test for collision
 		close = Collision(character, square);
 
+		//close if collision
 		if (close == true) 
 		{
 		
@@ -61,20 +70,21 @@ int main()
 		
 		}
 
-		// clear the window with black color
+		//clear the window
 		window.clear(sf::Color::Black);
 
-		// draw everything here...
+		//drawing
 		window.draw(square);
 		window.draw(character);
 
-		// end the current frame
+		//end the frame
 		window.display();
 	}
 
 	return 0;
 }
 
+//Check to see if the shape is at the edge of the window and then reset position
 sf::RectangleShape DecidePosition(sf::RectangleShape shape, float windowX, float windowY, float characterX)
 {
 
@@ -115,32 +125,39 @@ sf::RectangleShape DecidePosition(sf::RectangleShape shape, float windowX, float
 	
 }
 
+//Move the character around the screen
 sf::RectangleShape MovingAround (sf::RectangleShape shape, sf::RectangleShape square) 
 {
 
+	//declare variables
 	float speed = 0.5;
 
+	//Check for input
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right)) 
 	{
 	
+		//move right
 		shape.move(speed, 0);
 
 	}
 	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left)) 
 	{
 	
+		//move left
 		shape.move(-speed, 0);
 	
 	}
 	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up)) 
 	{
 
+		//move up
 		shape.move(0, -speed);
 	
 	}
 	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down)) 
 	{
 	
+		//move down
 		shape.move(0, speed);
 	
 	}
@@ -148,6 +165,7 @@ sf::RectangleShape MovingAround (sf::RectangleShape shape, sf::RectangleShape sq
 	return shape;
 }
 
+//draw the enemies
 sf::RectangleShape RectanglePosition(sf::RectangleShape shape) 
 {
 
@@ -157,20 +175,21 @@ sf::RectangleShape RectanglePosition(sf::RectangleShape shape)
 
 }
 
+//check for collisions
 bool Collision(sf::RectangleShape object1, sf::RectangleShape object2) 
 {
-
-	int counter = 0;
 
 	if (object1.getGlobalBounds().intersects(object2.getGlobalBounds()))
 	{
 
+		//if in collision with the second passed object
 		return true;
 
 	}
 	else
 	{
-
+		
+		//if not in collision with the second passed object
 		return false;
 
 	}
