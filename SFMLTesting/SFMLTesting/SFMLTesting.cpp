@@ -37,11 +37,16 @@ int main()
 	sf::RectangleShape square1(sf::Vector2f(rectX, rectY));
 	sf::RectangleShape square2(sf::Vector2f(rectX, rectY));
 	sf::RectangleShape square3(sf::Vector2f(rectX, rectY));
+	sf::RectangleShape square4(sf::Vector2f(rectX, rectY));
+	sf::RectangleShape square5(sf::Vector2f(rectX, rectY));
+	sf::RectangleShape square6(sf::Vector2f(rectX, rectY));
 
 	square1.setFillColor(sf::Color(255, 0, 0, 255));
 	square2.setFillColor(sf::Color(255, 0, 0, 255));
 	square3.setFillColor(sf::Color(255, 0, 0, 255));
-
+	square4.setFillColor(sf::Color(255, 0, 0, 255));
+	square5.setFillColor(sf::Color(255, 0, 0, 255));
+	square6.setFillColor(sf::Color(255, 0, 0, 255));
 
 	//window properties
 	float windowX = 800;
@@ -55,6 +60,9 @@ int main()
 	square1 = RectanglePosition(square1, windowX, windowY);
 	square2 = RectanglePosition(square2, windowX, windowY);
 	square3 = RectanglePosition(square3, windowX, windowY);
+	square4 = RectanglePosition(square4, windowX, windowY);
+	square5 = RectanglePosition(square5, windowX, windowY);
+	square6 = RectanglePosition(square6, windowX, windowY);
 
 	///GAME LOOP
 	while (window.isOpen())
@@ -84,7 +92,25 @@ int main()
 			{
 			
 				close = Collision(character, square3);
-			
+
+				if (close == false)
+				{ 
+				
+					close = Collision(character, square4);
+
+					if (close == false) 
+					{
+					
+						close = Collision(character, square5);
+					
+						if (close == false) 
+						{
+						
+							close = Collision(character, square6);
+						
+						}
+					}
+				}
 			}
 		}
 
@@ -103,6 +129,9 @@ int main()
 		window.draw(square1);
 		window.draw(square2);
 		window.draw(square3);
+		window.draw(square4);
+		window.draw(square5);
+		window.draw(square6);
 		window.draw(character);
 
 		//end the frame
