@@ -54,17 +54,11 @@ int main()
 
 		close = Collision(character, square);
 
-		if (close = true) 
+		if (close == true) 
 		{
 		
 			window.close();
 		
-		}
-		else
-		{
-
-			close = false;
-
 		}
 
 		// clear the window with black color
@@ -171,16 +165,8 @@ bool Collision(sf::RectangleShape object1, sf::RectangleShape object2)
 	if (object1.getGlobalBounds().intersects(object2.getGlobalBounds()))
 	{
 
-		if (counter = 1) 
-		{
-		
-			return true;
-		
-		}
+		return true;
 
-		counter = 1;
-
-		return false;
 	}
 	else
 	{
