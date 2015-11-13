@@ -3,9 +3,12 @@
 
 #include "stdafx.h"
 #include <SFML/Graphics.hpp>
+#include <iostream>
 
-sf::CircleShape MovingAround(sf::CircleShape shape);
-sf::CircleShape DecidePosition(sf::CircleShape shape, float windowX, float windowY, float radius);
+sf::RectangleShape MovingAround(sf::RectangleShape shape, sf::RectangleShape square);
+sf::RectangleShape DecidePosition(sf::RectangleShape shape, float windowX, float windowY, float characterX);
+sf::RectangleShape RectanglePosition(sf::RectangleShape shape);
+bool Collision(sf::RectangleShape object1, sf::RectangleShape object2);
 
 float drawShapeX;
 float drawShapeY;
@@ -13,14 +16,21 @@ float drawShapeY;
 int main()
 {
 
-	float radius = 40;
+	bool close = false;
+
+	float characterX = 40;
+	float characterY = characterX;
+
+	float rectX = 20;
+	float rectY = rectX;
 
 	float windowX = 800;
 	float windowY = 600;
 
-	sf::CircleShape circle(radius);
+	sf::RectangleShape character(sf::Vector2f(characterX, characterY));
+	sf::RectangleShape square(sf::Vector2f(rectX, rectY));
 
-	circle.setFillColor(sf::Color(255, 255, 255, 255));
+	character.setFillColor(sf::Color(255, 0, 0, 255));
 
 	// create the window
 	sf::RenderWindow window(sf::VideoMode(windowX, windowY), "My window");
@@ -37,14 +47,26 @@ int main()
 		}
 
 		//call functions
-		circle = MovingAround(circle);
-		circle = DecidePosition(circle, windowX, windowY, radius);
+		character = MovingAround(character, square);
+		character = DecidePosition(character, windowX, windowY, characterX);
+
+		square = RectanglePosition(square);
+
+		close = Collision(character, square);
+
+		if (close = true) 
+		{
+		
+			window.close();
+		
+		}
 
 		// clear the window with black color
 		window.clear(sf::Color::Black);
 
 		// draw everything here...
-		window.draw(circle);
+		window.draw(square);
+		window.draw(character);
 
 		// end the current frame
 		window.display();
@@ -53,16 +75,16 @@ int main()
 	return 0;
 }
 
-
-sf::CircleShape DecidePosition(sf::CircleShape shape, float windowX, float windowY, float radius) 
+sf::RectangleShape DecidePosition(sf::RectangleShape shape, float windowX, float windowY, float characterX)
 {
 
 	//declare variables
 	sf::Vector2f position = shape.getPosition();
 	float shapeX = position.x;
 	float shapeY = position.y;
-	float diameter = radius * 2;
+	float diameter = characterX;
 
+	//check for being out of bounds
 	if (shapeX > windowX - diameter)
 	{
 	
@@ -93,7 +115,7 @@ sf::CircleShape DecidePosition(sf::CircleShape shape, float windowX, float windo
 	
 }
 
-sf::CircleShape MovingAround (sf::CircleShape shape) 
+sf::RectangleShape MovingAround (sf::RectangleShape shape, sf::RectangleShape square) 
 {
 
 	float speed = 0.5;
@@ -101,31 +123,63 @@ sf::CircleShape MovingAround (sf::CircleShape shape)
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right)) 
 	{
 	
-		//shapeX += 1;
 		shape.move(speed, 0);
 
 	}
 	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left)) 
 	{
 	
-		//shapeX -= 1;
 		shape.move(-speed, 0);
 	
 	}
 	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up)) 
 	{
 
-		//shapeY -= 1;
 		shape.move(0, -speed);
 	
 	}
 	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down)) 
 	{
 	
-		//shapeY += 1;
 		shape.move(0, speed);
 	
 	}
 
 	return shape;
+}
+
+sf::RectangleShape RectanglePosition(sf::RectangleShape shape) 
+{
+
+	shape.setPosition(200, 100);
+
+	return shape;
+
+}
+
+bool Collision(sf::RectangleShape object1, sf::RectangleShape object2) 
+{
+
+	int counter = 0;
+
+	if (object1.getGlobalBounds().intersects(object2.getGlobalBounds()))
+	{
+
+		if (counter = 1) 
+		{
+		
+			return true;
+		
+		}
+
+		counter = 1;
+
+		return false;
+	}
+	else
+	{
+
+		return false;
+
+	}
 }
