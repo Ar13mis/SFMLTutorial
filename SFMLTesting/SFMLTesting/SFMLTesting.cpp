@@ -25,7 +25,7 @@ int main()
 
 	//Declare variables
 	bool close = false;
-	int difficulty = 6;
+	int difficulty = 7;			//Define a number one more than the number of squares
 
 	std::vector<sf::RectangleShape> enemies;
 
@@ -40,20 +40,6 @@ int main()
 	float rectX = 20;
 	float rectY = rectX;
 
-/*	sf::RectangleShape square1(sf::Vector2f(rectX, rectY));
-	sf::RectangleShape square2(sf::Vector2f(rectX, rectY));
-	sf::RectangleShape square3(sf::Vector2f(rectX, rectY));
-	sf::RectangleShape square4(sf::Vector2f(rectX, rectY));
-	sf::RectangleShape square5(sf::Vector2f(rectX, rectY));
-	sf::RectangleShape square6(sf::Vector2f(rectX, rectY));
-
-	square1.setFillColor(sf::Color(255, 0, 0, 255));
-	square2.setFillColor(sf::Color(255, 0, 0, 255));
-	square3.setFillColor(sf::Color(255, 0, 0, 255));
-	square4.setFillColor(sf::Color(255, 0, 0, 255));
-	square5.setFillColor(sf::Color(255, 0, 0, 255));
-	square6.setFillColor(sf::Color(255, 0, 0, 255)); */
-
 	//window properties
 	float windowX = 800;
 	float windowY = 600;
@@ -67,14 +53,6 @@ int main()
 
 	goalSquare.setFillColor(sf::Color(0, 255, 0, 255));
 	goalSquare.setPosition((windowX - 50), (windowY - 50));
-
-	//decide the random positions of the enemies
-//	square1 = RectanglePosition(square1, windowX, windowY);
-//	square2 = RectanglePosition(square2, windowX, windowY);
-//	square3 = RectanglePosition(square3, windowX, windowY);
-//	square4 = RectanglePosition(square4, windowX, windowY);
-//	square5 = RectanglePosition(square5, windowX, windowY);
-//	square6 = RectanglePosition(square6, windowX, windowY);
 
 	///GAME LOOP
 	while (window.isOpen())
@@ -95,38 +73,18 @@ int main()
 
 		enemies = CreateEnemies(enemies, difficulty, rectX, rectY);
 
-		/*test for collision
-		close = Collision(character, square1);
-		if (close == false) 
+		//Determmine collisions
+		close = Collision(character, enemies[0]);
+
+		for (int i = 1; i < (difficulty - 1); i++)
 		{
-		
-			close = Collision(character, square2);
-
-			if (close == false) 
+			if (close == false)
 			{
-			
-				close = Collision(character, square3);
 
-				if (close == false)
-				{ 
-				
-					close = Collision(character, square4);
+				close = Collision(character, enemies[i]);
 
-					if (close == false) 
-					{
-					
-						close = Collision(character, square5);
-					
-						if (close == false) 
-						{
-						
-							close = Collision(character, square6);
-						
-						}
-					}
-				}
 			}
-		}*/
+		}
 
 		//close if collision
 		if (close == true) 
@@ -140,13 +98,6 @@ int main()
 		window.clear(sf::Color::Black);
 
 		//drawing
-		/*window.draw(square1);
-		window.draw(square2);
-		window.draw(square3);
-		window.draw(square4);
-		window.draw(square5);
-		window.draw(square6);*/
-
 		for (int i = 0; i < (difficulty - 1); i++) 
 		{
 		
