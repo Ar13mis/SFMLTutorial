@@ -25,7 +25,7 @@ int main()
 
 	//Declare variables
 	bool close = false;
-	int difficulty = 7;			//Define a number one more than the number of squares
+	int difficulty = 11;			//Define a number one more than the number of squares
 
 	std::vector<sf::RectangleShape> enemies;
 
@@ -54,6 +54,9 @@ int main()
 	goalSquare.setFillColor(sf::Color(0, 255, 0, 255));
 	goalSquare.setPosition((windowX - 50), (windowY - 50));
 
+	//Create all the enemies
+	enemies = CreateEnemies(enemies, difficulty, rectX, rectY);
+
 	///GAME LOOP
 	while (window.isOpen())
 	{
@@ -71,8 +74,6 @@ int main()
 		character = MovingAround(character);
 		character = DecidePosition(character, windowX, windowY, characterX);
 
-		enemies = CreateEnemies(enemies, difficulty, rectX, rectY);
-
 		//Determmine collisions
 		close = Collision(character, enemies[0]);
 
@@ -84,7 +85,7 @@ int main()
 				close = Collision(character, enemies[i]);
 
 			}
-		}
+		} 
 
 		//close if collision
 		if (close == true) 
@@ -161,7 +162,7 @@ sf::RectangleShape MovingAround (sf::RectangleShape shape)
 {
 
 	//declare variables
-	float speed = 10;
+	float speed = 0.5;
 
 	//Check for input
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right)) 
