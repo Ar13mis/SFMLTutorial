@@ -5,6 +5,7 @@
 #include <SFML/Graphics.hpp>
 #include <cstdlib>
 #include <ctime>
+#include <vector>
 
 //define classes
 sf::RectangleShape MovingAround(sf::RectangleShape shape);
@@ -12,6 +13,8 @@ sf::RectangleShape DecidePosition(sf::RectangleShape shape, float windowX, float
 sf::RectangleShape RectanglePosition(sf::RectangleShape shape, float windowX, float windowY);
 bool Collision(sf::RectangleShape object1, sf::RectangleShape object2);
 int RandomNumber(int myMod);
+
+std::vector<sf::RectangleShape> CreateEnemies(std::vector<sf::RectangleShape>& enemies, int difficulty, float rectX, float rectY);
 
 //main function
 int main()
@@ -22,6 +25,9 @@ int main()
 
 	//Declare variables
 	bool close = false;
+	int difficulty = 6;
+
+	std::vector<sf::RectangleShape> enemies;
 
 	//Character properties
 	float characterX = 40;
@@ -34,7 +40,7 @@ int main()
 	float rectX = 20;
 	float rectY = rectX;
 
-	sf::RectangleShape square1(sf::Vector2f(rectX, rectY));
+/*	sf::RectangleShape square1(sf::Vector2f(rectX, rectY));
 	sf::RectangleShape square2(sf::Vector2f(rectX, rectY));
 	sf::RectangleShape square3(sf::Vector2f(rectX, rectY));
 	sf::RectangleShape square4(sf::Vector2f(rectX, rectY));
@@ -46,7 +52,7 @@ int main()
 	square3.setFillColor(sf::Color(255, 0, 0, 255));
 	square4.setFillColor(sf::Color(255, 0, 0, 255));
 	square5.setFillColor(sf::Color(255, 0, 0, 255));
-	square6.setFillColor(sf::Color(255, 0, 0, 255));
+	square6.setFillColor(sf::Color(255, 0, 0, 255)); */
 
 	//window properties
 	float windowX = 800;
@@ -56,13 +62,19 @@ int main()
 	// create the window
 	sf::RenderWindow window(sf::VideoMode(windowX, windowY), "My window");
 
+	//goal properties
+	sf::RectangleShape goalSquare(sf::Vector2f(30, 30));
+
+	goalSquare.setFillColor(sf::Color(0, 255, 0, 255));
+	goalSquare.setPosition((windowX - 50), (windowY - 50));
+
 	//decide the random positions of the enemies
-	square1 = RectanglePosition(square1, windowX, windowY);
-	square2 = RectanglePosition(square2, windowX, windowY);
-	square3 = RectanglePosition(square3, windowX, windowY);
-	square4 = RectanglePosition(square4, windowX, windowY);
-	square5 = RectanglePosition(square5, windowX, windowY);
-	square6 = RectanglePosition(square6, windowX, windowY);
+//	square1 = RectanglePosition(square1, windowX, windowY);
+//	square2 = RectanglePosition(square2, windowX, windowY);
+//	square3 = RectanglePosition(square3, windowX, windowY);
+//	square4 = RectanglePosition(square4, windowX, windowY);
+//	square5 = RectanglePosition(square5, windowX, windowY);
+//	square6 = RectanglePosition(square6, windowX, windowY);
 
 	///GAME LOOP
 	while (window.isOpen())
@@ -81,7 +93,9 @@ int main()
 		character = MovingAround(character);
 		character = DecidePosition(character, windowX, windowY, characterX);
 
-		//test for collision
+		enemies = CreateEnemies(enemies, difficulty, rectX, rectY);
+
+		/*test for collision
 		close = Collision(character, square1);
 		if (close == false) 
 		{
@@ -112,7 +126,7 @@ int main()
 					}
 				}
 			}
-		}
+		}*/
 
 		//close if collision
 		if (close == true) 
@@ -126,12 +140,21 @@ int main()
 		window.clear(sf::Color::Black);
 
 		//drawing
-		window.draw(square1);
+		/*window.draw(square1);
 		window.draw(square2);
 		window.draw(square3);
 		window.draw(square4);
 		window.draw(square5);
-		window.draw(square6);
+		window.draw(square6);*/
+
+		for (int i = 0; i < (difficulty - 1); i++) 
+		{
+		
+			window.draw(enemies[i]);
+		
+		}
+
+		window.draw(goalSquare);
 		window.draw(character);
 
 		//end the frame
@@ -187,7 +210,7 @@ sf::RectangleShape MovingAround (sf::RectangleShape shape)
 {
 
 	//declare variables
-	float speed = 0.5;
+	float speed = 10;
 
 	//Check for input
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right)) 
@@ -267,4 +290,26 @@ int RandomNumber(int myMod)
 
 		return randomNumber;
 
+}
+
+//initialize the random enemies
+std::vector<sf::RectangleShape> CreateEnemies(std::vector<sf::RectangleShape>& enemies, int difficulty, float rectX, float rectY) 
+{
+
+	sf::RectangleShape enemy;
+
+	for (int i = 1; i < difficulty; ++i) 
+	{
+	
+		sf::RectangleShape enemy(sf::Vector2f(rectX, rectY));
+
+		enemy.setFillColor(sf::Color(255, 0, 0, 255));
+
+		enemy = RectanglePosition(enemy, 800, 600);
+
+		enemies.push_back(enemy);
+	
+	}
+
+	return enemies;
 }
