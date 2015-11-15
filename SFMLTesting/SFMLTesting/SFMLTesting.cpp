@@ -6,6 +6,7 @@
 #include <cstdlib>
 #include <ctime>
 #include <vector>
+#include <iostream>
 
 //define classes
 sf::RectangleShape MovingAround(sf::RectangleShape shape);
@@ -26,6 +27,7 @@ int main()
 	//Declare variables
 	bool close = false;
 	int difficulty = 11;			//Define a number one more than the number of squares
+	int score = 0;
 
 	std::vector<sf::RectangleShape> enemies;
 
@@ -57,6 +59,11 @@ int main()
 	//Create all the enemies
 	enemies = CreateEnemies(enemies, difficulty, rectX, rectY);
 
+	///MAIN MENU
+	window.clear(sf::Color::Black);
+
+	system("pause");
+
 	///GAME LOOP
 	while (window.isOpen())
 	{
@@ -73,6 +80,16 @@ int main()
 		//character functions
 		character = MovingAround(character);
 		character = DecidePosition(character, windowX, windowY, characterX);
+
+		//check score
+		if (Collision(character, goalSquare)) 
+		{
+		
+			score += 1;
+			character.setPosition(10, 10);
+			std::cout << score << std::endl;
+		
+		}
 
 		//Determmine collisions
 		close = Collision(character, enemies[0]);
@@ -91,7 +108,10 @@ int main()
 		if (close == true) 
 		{
 		
-			window.close();
+			enemies = CreateEnemies(enemies, difficulty, rectX, rectY);
+			character.setPosition(10, 10);
+			score = 0;
+			close = false;
 		
 		}
 
@@ -111,6 +131,7 @@ int main()
 
 		//end the frame
 		window.display();
+
 	}
 
 	return 0;
