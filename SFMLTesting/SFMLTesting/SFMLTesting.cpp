@@ -20,15 +20,13 @@ std::vector<sf::RectangleShape> CreateEnemies(std::vector<sf::RectangleShape>& e
 //main function
 int main()
 {
-
 	//seed the random number generator
 	srand(time(NULL));
 
 	//Declare variables
 	bool close = false;
-	int difficulty = 11;			//Define a number one more than the number of squares
+	int difficulty = 2;			//Define a number one more than the number of squares
 	int score = 0;
-
 	std::vector<sf::RectangleShape> enemies;
 
 	//Character properties
@@ -62,7 +60,7 @@ int main()
 	///MAIN MENU
 	window.clear(sf::Color::Black);
 
-	system("pause");
+	//system("pause");
 
 	///GAME LOOP
 	while (window.isOpen())
@@ -84,11 +82,25 @@ int main()
 		//check score
 		if (Collision(character, goalSquare)) 
 		{
-		
+			
+			//add to your score
 			score += 1;
+
+			//reset the character
 			character.setPosition(10, 10);
+
+			//write your score
 			std::cout << score << std::endl;
-		
+
+			//increase the difficulty
+			difficulty += 1;
+
+			//clear the vector
+			enemies.clear();
+
+			//generate new enemies
+			enemies = CreateEnemies(enemies, difficulty, rectX, rectY);
+
 		}
 
 		//Determmine collisions
@@ -108,10 +120,22 @@ int main()
 		if (close == true) 
 		{
 		
+			//clear the vector
+			enemies.clear();
+
+			//create more enemies
 			enemies = CreateEnemies(enemies, difficulty, rectX, rectY);
+
+			//reset the character
 			character.setPosition(10, 10);
+
+			//reset the score
 			score = 0;
+
+			//reset collision detection variable
 			close = false;
+
+			difficulty = 2;
 		
 		}
 
@@ -256,13 +280,17 @@ int RandomNumber(int myMod)
 {
 
 		//declare a random number variable
-		int randomNumber;
+		int randomNumber = rand() % myMod;
 
-		//get the random number
-		randomNumber = rand() % myMod + 1;
+		if (randomNumber < myMod)
+		{
+		
+			
+
+		}
 
 		return randomNumber;
-
+		
 }
 
 //initialize the random enemies
